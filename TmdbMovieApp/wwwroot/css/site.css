@@ -80,3 +80,40 @@ h1 {
         font-weight: bold;
         color: #333;
     }
+
+.search-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#searchInput {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.pagination {
+    text-align: center;
+    margin: 20px 0;
+}
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+    }
+
+        .pagination a.active {
+            background-color: #1168b2;
+            color: white;
+            border: 1px solid #000f;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }

@@ -1,6 +1,52 @@
 ﻿@model List<Movie>
+@{
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int pageRange = 3; // Número de páginas para mostrar ao redor da página atual
+}
 
-<h1>Filmes Populares</h1>
+<br />
+<h1 class="text-center" style="font-family:'Fira Code'; font-size:48px ">Consumindo API TMDB</h1>
+<p class="text-center" style="font-family:'Fira Code'">Desenvolvido por DEV_WES</p>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Procurar por título..." onkeyup="filterMovies()">
+</div>
+
+<div class="pagination justify-content-center">
+    @if (currentPage > 1)
+    {
+        <a href="@Url.Action("Index", new { page = currentPage - 1 })">Anterior</a>
+    }
+
+    @if (currentPage > pageRange + 1)
+    {
+        <a href="@Url.Action("Index", new { page = 1 })">1</a>
+        @if (currentPage > pageRange + 2)
+        {
+            <span>...</span>
+        }
+    }
+
+    @for (int i = Math.Max(1, currentPage - pageRange); i <= Math.Min(totalPages, currentPage + pageRange); i++)
+    {
+        <a href="@Url.Action("Index", new { page = i })" class="@(i == currentPage ? "active" : "")">@i</a>
+    }
+
+    @if (currentPage < totalPages - pageRange)
+    {
+        @if (currentPage < totalPages - pageRange - 1)
+        {
+            <span>...</span>
+        }
+        <a href="@Url.Action("Index", new { page = totalPages })">@totalPages</a>
+    }
+
+    @if (currentPage < totalPages)
+    {
+        <a href="@Url.Action("Index", new { page = currentPage + 1 })">Próxima</a>
+    }
+</div>
 
 <div class="movies-list">
     @foreach (var movie in Model)
@@ -10,10 +56,31 @@
                 <img src="https://image.tmdb.org/t/p/w500/@movie.poster_path" alt="@movie.Title" />
             </div>
             <div class="movie-content">
-                <h2>@movie.Title</h2>
+                <h2 class="movie-title">@movie.Title</h2>
                 <p>@movie.Overview</p>
                 <p><strong>Lançamento:</strong> @movie.release_date</p>
             </div>
         </div>
     }
 </div>
+
+
+<script>
+    function filterMovies() {
+        var input = document.getElementById('searchInput');
+        var filter = input.value.toLowerCase();
+        var moviesList = document.getElementsByClassName('movies-list')[0]; // Acessa o primeiro elemento com a classe 'movies-list'
+        var movies = moviesList.getElementsByClassName('movie-card');
+
+        for (var i = 0; i < movies.length; i++) {
+            var titleElement = movies[i].getElementsByClassName('movie-title')[0];
+            var title = titleElement.textContent || titleElement.innerText;
+            if (title.toLowerCase().indexOf(filter) > -1) {
+                movies[i].style.display = "";
+            } else {
+                movies[i].style.display = "none";
+            }
+        }
+    }
+</script>
+

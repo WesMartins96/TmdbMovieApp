@@ -15,10 +15,12 @@ namespace TmdbMovieApp.Controllers
 
         [HttpGet]
         [EnableCors("AllowSpecificOrigins")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var movies = await _tmdbService.GetPopularMoviesAsync();
-            return View(movies);
+            var movies = await _tmdbService.GetAllMoviesAsync(page);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = movies.TotalPages;
+            return View(movies.Results);
         }
     }
 }

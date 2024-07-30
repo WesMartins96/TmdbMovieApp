@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace TmdbMovieApp.Models
 {
@@ -22,10 +23,29 @@ namespace TmdbMovieApp.Models
 
             return tmdbResponse.Results;
         }
+
+        public async Task<TmdbResponse> GetAllMoviesAsync(int page)
+        {
+            var response = await _httpClient.GetAsync($"https://api.themoviedb.org/3/movie/top_rated?api_key={_apiKey}&language=pt-BR&page={page}");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var movies = JsonConvert.DeserializeObject<TmdbResponse>(content);
+            return movies;
+        }
     }
 
     public class TmdbResponse
     {
+        [JsonProperty("page")]
+        public int Page { get; set; }
+
+        [JsonProperty("total_results")]
+        public int TotalResults { get; set; }
+
+        [JsonProperty("total_pages")]
+        public int TotalPages { get; set; }
+
+        [JsonProperty("results")]
         public List<Movie> Results { get; set; }
     }
 }
