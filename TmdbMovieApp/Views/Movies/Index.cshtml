@@ -1,0 +1,19 @@
+﻿@model List<Movie>
+
+<h1>Filmes Populares</h1>
+
+<div class="movies-list">
+    @foreach (var movie in Model)
+    {
+        <div class="movie-card">
+            <div class="movie-image">
+                <img src="https://image.tmdb.org/t/p/w500/@movie.poster_path" alt="@movie.Title" />
+            </div>
+            <div class="movie-content">
+                <h2>@movie.Title</h2>
+                <p>@movie.Overview</p>
+                <p><strong>Lançamento:</strong> @movie.release_date</p>
+            </div>
+        </div>
+    }
+</div>
